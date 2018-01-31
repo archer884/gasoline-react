@@ -1,54 +1,50 @@
+import VehicleService from './service/VehicleService';
 import * as React from 'react';
-import * as axios from 'axios';
-
-const Token = 'eyJleHAiOjE1MTc5NTA0MzIsInVpZCI6IjEiLCJ1c3IiOiJhcmNoZXI4ODQifQ'
-    + '==.SF2Ir0+iBXW8Z5M6/RDMcOLZdLSl9Diq6ZArvkuFiak=';
+import { VehicleModel } from './shared/Model';
+import './Vehicles.css';
 
 class Vehicles extends React.Component<Props, State> {
-    constructor(foo: Props) {
-        super(foo);
+    service;
+
+    constructor(props: Props) {
+        super(props);
         this.state = { vehicles: [] };
+        this.service = props.service;
     }
 
     componentDidMount() {
-        let client = axios.default.create({
-            baseURL: 'http://localhost:1337',
-            timeout: 1000,
-            headers: { 'Authorization': 'Bearer ' + Token }
-        });
-        
-        client
-            .get<Collection<VehicleDisplay>>('/api/vehicles')
-            .then(vehicles => this.setState({
-                vehicles: vehicles.data.items
-            }));
+        this.service
+            .get()
+            .then(response => this.setState({ vehicles: response.items }));
     }
 
     render() {
-        let names = this.state.vehicles.map(v => <li key={v.id}>{v.name}</li>);
-        return (
-            <div>
-                <ul>{names}</ul>
-            </div>
-        );
+        if (this.state.vehicles.length >= 0) {
+            let names = this.state.vehicles.map(v => <li key={v.id}>{v.name}</li>);
+            return (
+                <div className="Vehicles">
+                    <h4>Vehicles</h4>
+                    <p>Here are the vehicles you have stored.</p>
+                    <ul>{names}</ul>
+                </div>
+            );
+        } else {
+            return (
+                <div className="Vehicles">
+                    <h4>Vehicles</h4>
+                    <p>Looks like you have not stored any vehicles yet!</p>
+                </div>
+            );
+        }
     }
 }
 
+interface Props {
+    service: VehicleService;
+}
+
 interface State {
-    vehicles: VehicleDisplay[];
-}
-
-interface Props { }
-
-interface Collection<T> {
-    count: number;
-    items: T[];
-}
-
-interface VehicleDisplay {
-    id: string;
-    name: string;
-    description: string;
+    vehicles: VehicleModel[];
 }
 
 export default Vehicles;
