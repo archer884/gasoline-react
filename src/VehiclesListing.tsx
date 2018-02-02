@@ -1,7 +1,8 @@
-import VehicleService from './service/VehicleService';
-import * as React from 'react';
+import './VehiclesListing.css';
 import { VehicleModel } from './shared/Model';
-import './Vehicles.css';
+import * as React from 'react';
+import VehicleCard from './VehicleCard';
+import VehicleService from './service/VehicleService';
 
 class Vehicles extends React.Component<Props, State> {
     service;
@@ -20,12 +21,12 @@ class Vehicles extends React.Component<Props, State> {
 
     render() {
         if (this.state.vehicles.length >= 0) {
-            let names = this.state.vehicles.map(v => <li key={v.id}>{v.name}</li>);
+            let vehicles = this.state.vehicles.map(v => <VehicleCard key={v.id} vehicle={v} />);
             return (
                 <div className="Vehicles">
                     <h4>Vehicles</h4>
                     <p>Here are the vehicles you have stored.</p>
-                    <ul>{names}</ul>
+                    {vehicles}
                 </div>
             );
         } else {

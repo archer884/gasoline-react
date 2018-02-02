@@ -1,8 +1,7 @@
 import './App.css';
-import './Vehicles.tsx';
 import * as React from 'react';
 import * as Token from './shared/Token';
-import Vehicles from './Vehicles';
+import VehiclesListing from './VehiclesListing';
 import VehicleService from './service/VehicleService';
 
 const logo = require('./logo.svg');
@@ -40,7 +39,7 @@ class App extends React.Component<AppProps, AppState> {
             <img src={logo} className="App-logo" alt="logo" />
             <h1 className="App-title">Welcome to React</h1>
           </header>
-          <Vehicles service={new VehicleService(this.state.token)} />
+          <VehiclesListing service={new VehicleService(this.state.token)} />
         </div>
       );
     }
